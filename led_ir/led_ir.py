@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+https://www.dropbox.com/s/eusq9iencv01lyf/photo.py
+http://www.rpiblog.com/2012/11/reading-analog-values-from-digital-pins.html
+"""
 import time
 
 import RPi.GPIO as GPIO
@@ -17,8 +21,9 @@ def rc_analog(pin):
     time.sleep(0.1)
     GPIO.setup(pin, GPIO.IN)
     # Count loops until voltage across capacitor reads high on GPIO
-    while GPIO.input(pin) == GPIO.LOW:
+    while GPIO.input(pin) == GPIO.LOW or counter > 900:
         counter = counter + 1
+
     return counter
 
 
