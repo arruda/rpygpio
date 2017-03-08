@@ -21,7 +21,7 @@ def rc_analog(pin):
     time.sleep(0.1)
     GPIO.setup(pin, GPIO.IN)
     # Count loops until voltage across capacitor reads high on GPIO
-    while GPIO.input(pin) == GPIO.LOW or counter > 900:
+    while GPIO.input(pin) == GPIO.LOW and counter < 900:
         counter = counter + 1
 
     return counter
