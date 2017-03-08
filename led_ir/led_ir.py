@@ -4,7 +4,7 @@ import time
 
 import RPi.GPIO as GPIO
 
-LED = 22
+LED = 12
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.cleanup()
