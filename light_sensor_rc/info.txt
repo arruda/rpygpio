@@ -1,0 +1,2 @@
+https://learn.adafruit.com/basic-resistor-sensor-reading-on-raspberry-pi/basic-photocell-reading
+i'm using a 10uF capacitor instead (was the only one that I could use)
