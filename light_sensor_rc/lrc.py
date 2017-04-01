@@ -11,6 +11,8 @@ import time
 DEBUG = 1
 GPIO.setmode(GPIO.BOARD)
 
+READING_LIMIT = 9000  # could even do some calibration
+
 
 def rc_time(rc_pin):
         reading = 0
@@ -20,7 +22,7 @@ def rc_time(rc_pin):
 
         GPIO.setup(rc_pin, GPIO.IN)
         # This takes about 1 millisecond per loop cycle
-        while (GPIO.input(rc_pin) == GPIO.LOW):
+        while (GPIO.input(rc_pin) == GPIO.LOW) and (reading < READING_LIMIT):
                 reading += 1
         return reading
 
@@ -28,8 +30,6 @@ def rc_time(rc_pin):
 def main(rc_pin):
     print "starting"
     while True:
-        print "looping..."
-
         print rc_time(rc_pin)     # Read RC timing using pin #18
 
 
