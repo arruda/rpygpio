@@ -26,11 +26,15 @@ def rc_time(rc_pin):
 
 
 def main(rc_pin):
+    print "starting"
     while True:
+        print "looping..."
+
         print rc_time(rc_pin)     # Read RC timing using pin #18
 
 
 if __name__ == '__main__':
+    GPIO.cleanup()
     try:
         main(18)
     except KeyboardInterrupt:
