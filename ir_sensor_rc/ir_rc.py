@@ -18,7 +18,7 @@ def rc_time(rc_pin):
         reading = 0
         GPIO.setup(rc_pin, GPIO.OUT)
         GPIO.output(rc_pin, GPIO.LOW)
-        time.sleep(0.05)
+        time.sleep(0.2)
 
         GPIO.setup(rc_pin, GPIO.IN)
         while (GPIO.input(rc_pin) == GPIO.LOW):
