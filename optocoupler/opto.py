@@ -4,20 +4,21 @@
 
 import RPi.GPIO as GPIO
 import time
-rc_pin = 18
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(rc_pin, GPIO.OUT)
 
 
-def main():
+def main(rc_pin):
+    GPIO.setup(rc_pin, GPIO.OUT)
     while True:
-        GPIO.output(rc_pin, GPIO.HIGHT)
+        GPIO.output(rc_pin, GPIO.HIGH)
         time.sleep(0.5)
         GPIO.output(rc_pin, GPIO.LOW)
         time.sleep(0.5)
 
 
 if __name__ == '__main__':
+    print 'will start in 5 seconds.'
+    time.sleep(5)
     try:
         main(18)
     except KeyboardInterrupt:
