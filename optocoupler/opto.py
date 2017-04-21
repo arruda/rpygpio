@@ -10,10 +10,12 @@ GPIO.setmode(GPIO.BOARD)
 def main(rc_pin):
     GPIO.setup(rc_pin, GPIO.OUT)
     while True:
+        print "on"
         GPIO.output(rc_pin, GPIO.HIGH)
         time.sleep(0.5)
+        print "off"
         GPIO.output(rc_pin, GPIO.LOW)
-        time.sleep(0.5)
+        time.sleep(1)
 
 
 if __name__ == '__main__':
