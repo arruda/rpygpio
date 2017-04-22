@@ -10,8 +10,8 @@ import time
 
 GPIO.setmode(GPIO.BOARD)
 
-READING_LIMIT = 940  #could even do some calibration
-READING_LIMIT_CM = 32
+READING_LIMIT = 650  #could even do some calibration
+READING_LIMIT_CM = 55
 
 # 'ignore' noise
 SIGMA = READING_LIMIT / READING_LIMIT_CM
@@ -36,7 +36,7 @@ def rc_time_with_sigma(rc_pin, sigma):
         distance = abs(last_reading - current_reading)
         cm_value = rc_to_cm(last_reading, READING_LIMIT, READING_LIMIT_CM)
         print cm_value
-        if check_inside_area(cm_value, 30, 20):
+        if check_inside_area(cm_value, 30, 15):
             print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
     last_reading = current_reading
     return last_reading
