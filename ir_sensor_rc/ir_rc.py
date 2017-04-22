@@ -15,7 +15,7 @@ READING_LIMIT = 900
 
 class PinController(object):
     def __init__(self, rc_pin, max_dist, min_dist, n_samples=5, n_samples_cal=500, rc_time_sleep=0.01):
-        super(PinController).__init__()
+        super(PinController).__init__(self)
         self.rc_pin = rc_pin
         self.n_samples = n_samples
         self.n_samples_cal = n_samples_cal
@@ -74,5 +74,5 @@ def main(rc_pin):
 if __name__ == '__main__':
     try:
         main(18)
-    except KeyboardInterrupt:
+    except Exception:
         GPIO.cleanup()
