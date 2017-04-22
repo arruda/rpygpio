@@ -57,7 +57,8 @@ class PinController(object):
 
     def evaluate(self):
         reading = self.rc_with_samples(self.n_samples)
-        return self.reading_min_limit > reading < self.reading_max_limit
+        print reading
+        return self.reading_min_limit < reading < self.reading_max_limit
 
 
 def main(rc_pin):
