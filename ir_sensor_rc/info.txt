@@ -4,3 +4,5 @@ and using a pair of IR transmiter/receiver (low distance)
 
 Using a 100nf works really well! Last time with a til78, with a 1k Ohm Resistor I managed to get a great precision on 32-10 cm.
 I still need to check if I can improve this distance. It would be nice to have gave at least 45-15)
+
+Using 3 x 10nf I've managed to make a 45-15
