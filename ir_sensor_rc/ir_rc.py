@@ -10,60 +10,68 @@ import time
 
 GPIO.setmode(GPIO.BOARD)
 
-READING_LIMIT = 650  #could even do some calibration
-READING_LIMIT_CM = 55
-
-# 'ignore' noise
-SIGMA = READING_LIMIT / READING_LIMIT_CM
+READING_LIMIT = 900
 
 
-def check_inside_area(value, max_value, min_value):
-    return min_value < value < max_value
+class PinController(object):
+    def __init__(self, rc_pin, max_dist, min_dist, n_samples=5, n_samples_cal=500, rc_time_sleep=0.01):
+        super(PinController).__init__()
+        self.rc_pin = rc_pin
+        self.n_samples = n_samples
+        self.n_samples_cal = n_samples_cal
+        self.rc_time_sleep = rc_time_sleep
+        self.reading_max_limit = 0
+        self.reading_min_limit = 0
+        self.calibration()
 
+    def calibration(self):
+        for i in xrange(5):
+            print "Starting MIN calibration in %d..." % i
+            time.sleep(1)
+        self.reading_min_limit = self.rc_with_samples(self.n_samples_cal)
+        for i in xrange(5):
+            print "Starting MAX calibration in %d..." % i
+            time.sleep(1)
+        self.reading_max_limit = self.rc_with_samples(self.n_samples_cal)
 
-def rc_to_cm(rc_value, rc_max, cm_max):
-    conversion_rate = float(cm_max) / rc_max
-    cm_value = rc_value * conversion_rate
-    return cm_value
+        print "Final results: min: %d/ max: %d" % (self.reading_min_limit, self.reading_max_limit)
+        time.sleep(1)
 
+    def rc_with_samples(self, n_samples):
+        samples = []
+        for i in xrange(n_samples):
+            samples.append(self.rc_time())
+        avg = sum(samples) / len(samples)
+        return avg
 
-def rc_time_with_sigma(rc_pin, sigma):
-    current_reading = rc_time(rc_pin)
-    last_reading = current_reading
-    distance = 0
-    while distance < sigma:
-        current_reading = rc_time(rc_pin)
-        distance = abs(last_reading - current_reading)
-        cm_value = rc_to_cm(last_reading, READING_LIMIT, READING_LIMIT_CM)
-        print cm_value
-        if check_inside_area(cm_value, 30, 15):
-            print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-    last_reading = current_reading
-    return last_reading
+    def rc_time(self):
+            reading = 0
+            GPIO.setup(self.rc_pin, GPIO.OUT)
+            GPIO.output(self.rc_pin, GPIO.LOW)
+            time.sleep(self.rc_time_sleep)
 
+            GPIO.setup(self.rc_pin, GPIO.IN)
+            while (GPIO.input(self.rc_pin) == GPIO.LOW) and (reading < READING_LIMIT):
+                    reading += 1
+            return reading
 
-def rc_time(rc_pin):
-        reading = 0
-        GPIO.setup(rc_pin, GPIO.OUT)
-        GPIO.output(rc_pin, GPIO.LOW)
-        time.sleep(0.01)
-
-        GPIO.setup(rc_pin, GPIO.IN)
-        while (GPIO.input(rc_pin) == GPIO.LOW) and (reading < READING_LIMIT):
-                reading += 1
-        return reading
+    def evaluate(self):
+        reading = self.rc_with_samples(self.n_samples)
+        return self.reading_min_limit > reading < self.reading_max_limit
 
 
 def main(rc_pin):
+    ctrl = PinController(rc_pin=rc_pin, max_dist=55, min_dist=0, n_samples=5, n_samples_cal=500, rc_time_sleep=0.01)
     print "starting"
     while True:
-        rc_value = rc_time_with_sigma(rc_pin, SIGMA)
-        cm_value = rc_to_cm(rc_value, READING_LIMIT, READING_LIMIT_CM)
-        print cm_value
+        evaluation = ctrl.evaluate()
+        if evaluation:
+            print ">>>>>>>>>>>>>"
+        else:
+            print ""
 
 
 if __name__ == '__main__':
-    # GPIO.cleanup()
     try:
         main(18)
     except KeyboardInterrupt:
