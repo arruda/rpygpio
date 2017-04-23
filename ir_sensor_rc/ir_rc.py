@@ -10,7 +10,7 @@ import time
 
 GPIO.setmode(GPIO.BOARD)
 
-READING_LIMIT = 900
+READING_LIMIT = 650
 
 
 class PinController(object):
@@ -62,7 +62,7 @@ class PinController(object):
 
 
 def main(rc_pin):
-    ctrl = PinController(rc_pin=rc_pin, max_dist=55, min_dist=0, n_samples=5, n_samples_cal=500, rc_time_sleep=0.01)
+    ctrl = PinController(rc_pin=rc_pin, max_dist=55, min_dist=0, n_samples=8, n_samples_cal=500, rc_time_sleep=0.01)
     print "starting"
     while True:
         evaluation = ctrl.evaluate()
